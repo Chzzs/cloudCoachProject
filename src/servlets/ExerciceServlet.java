@@ -15,5 +15,7 @@ public class ExerciceServlet extends Servlet {
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         logger.info("GET ExerciceServlet");
+        
+        
     }
 }
