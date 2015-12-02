@@ -1,3 +1,9 @@
 .idea/
 hd.iml
 out/
+war/
+.classpath
+.project
+.settings/
+src/log4j.properties
+
