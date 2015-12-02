@@ -13,7 +13,7 @@ import java.util.logging.Logger;
  */
 public abstract class Servlet extends HttpServlet {
 
-    protected static Logger logger = Logger.getLogger(Servlet.class.getName());
+    protected Logger logger = Logger.getLogger(Servlet.class.getName());
 
     public static String getBody(HttpServletRequest request) throws IOException {
 

@@ -4,70 +4,56 @@
          xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_3_1.xsd"
          version="3.1">
     <!-- Servlets -->
-    <servlet>
-        <servlet-name>LoginServlet</servlet-name>
-        <servlet-class>servlets.LoginServlet</servlet-class>
-    </servlet>
 
-    <servlet>
-        <servlet-name>SigninServlet</servlet-name>
-        <servlet-class>servlets.SigninServlet</servlet-class>
-    </servlet>
-    <servlet>
-        <servlet-name>WelcomeServlet</servlet-name>
-        <servlet-class>servlets.WelcomeServlet</servlet-class>
-    </servlet>
-    <servlet>
-        <servlet-name>FetchServlet</servlet-name>
-        <servlet-class>servlets.FetchServlet</servlet-class>
-    </servlet>
 
     <!-- Tasks -->
+
     <servlet>
-        <servlet-name>RegisterTask</servlet-name>
-        <servlet-class>tasks.RegisterTask</servlet-class>
+        <servlet-name>HomeServlet</servlet-name>
+        <servlet-class>servlets.HomeServlet</servlet-class>
     </servlet>
     <servlet>
-        <servlet-name>CleanTask</servlet-name>
-        <servlet-class>tasks.CleanTask</servlet-class>
+        <servlet-name>SearchServlet</servlet-name>
+        <servlet-class>servlets.SearchServlet</servlet-class>
     </servlet>
     <servlet>
-        <servlet-name>ChannelServlet</servlet-name>
-        <servlet-class>servlets.ChannelServlet</servlet-class>
+        <servlet-name>SignServlet</servlet-name>
+        <servlet-class>servlets.SignServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>TrainingServlet</servlet-name>
+        <servlet-class>servlets.TrainingServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>ExerciceServlet</servlet-name>
+        <servlet-class>servlets.ExerciceServlet</servlet-class>
     </servlet>
 
 
     <!-- Servlets mapping -->
+
     <servlet-mapping>
-        <servlet-name>SigninServlet</servlet-name>
-        <url-pattern>/signin</url-pattern>
+        <servlet-name>HomeServlet</servlet-name>
+        <url-pattern>/home</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
-        <servlet-name>LoginServlet</servlet-name>
-        <url-pattern>/login</url-pattern>
+        <servlet-name>SearchServlet</servlet-name>
+        <url-pattern>/search</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
-        <servlet-name>WelcomeServlet</servlet-name>
-        <url-pattern>/welcome</url-pattern>
+        <servlet-name>ExerciceServlet</servlet-name>
+        <url-pattern>/exercice</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
-        <servlet-name>FetchServlet</servlet-name>
-        <url-pattern>/fetch</url-pattern>
+        <servlet-name>SignServlet</servlet-name>
+        <url-pattern>/sign</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
-        <servlet-name>ChannelServlet</servlet-name>
-        <url-pattern>/channel</url-pattern>
+        <servlet-name>TrainingServlet</servlet-name>
+        <url-pattern>/training</url-pattern>
     </servlet-mapping>
 
     <!-- Tasks mapping -->
-    <servlet-mapping>
-        <servlet-name>RegisterTask</servlet-name>
-        <url-pattern>/tasks/register</url-pattern>
-    </servlet-mapping>
-    <servlet-mapping>
-        <servlet-name>CleanTask</servlet-name>
-        <url-pattern>/tasks/clean</url-pattern>
-    </servlet-mapping>
 
   <!--
         <security-constraint>

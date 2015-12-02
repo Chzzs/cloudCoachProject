@@ -1,4 +1,4 @@
-package tasks;
+package servlets;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -7,17 +7,15 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 /**
- * Created by Chazz on 27/11/15.
+ * Created by Chazz on 02/12/15.
  */
-public class CleanTask extends Task {
-
+public class TrainingServlet extends Servlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        logger.info("doPost");
-        System.out.println("doPost");
+
     }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        logger.info("doGet");
-        System.out.println("doGet");
+        logger.info("GET TrainingServlet");
+
     }
 }
