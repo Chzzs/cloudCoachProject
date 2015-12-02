@@ -13,6 +13,8 @@ public abstract class AbstractUser {
     protected String email;
     protected Date birthdate;
 
+
+
     AbstractUser(String uuid, String firstname, String lastname, String email, Date birthdate) {
         this.uuid = uuid;
         this.firstname = firstname;
@@ -20,6 +22,8 @@ public abstract class AbstractUser {
         this.email = email;
         this.birthdate = birthdate;
     }
+
+
 
     @Override
     public String toString() {
