@@ -65,11 +65,11 @@ public class SignServlet extends Servlet {
 	      	    System.out.println("User email: " + payload.getEmail());
 	        	PrintWriter out = response.getWriter();
 	        	
-	      	  JSONObject jsonToSend;
-	  		jsonToSend=new JSONObject();
+	        	JSONObject jsonToSend;
+	        	jsonToSend=new JSONObject();
 	  		
-	  		jsonToSend.put("email",payload.getEmail());
-	  		jsonToSend.put("tokenId",payload.getSubject());
+	        	jsonToSend.put("email",payload.getEmail());
+	        	jsonToSend.put("tokenId",payload.getSubject());
 	  		
 	      	    out.write(jsonToSend.toString());
 	      	    out.flush();
@@ -84,9 +84,6 @@ public class SignServlet extends Servlet {
         logger.info("GET SignServlet");
         
 
-    	
-    	
-		
 		
     }
     
