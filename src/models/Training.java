@@ -1,6 +1,8 @@
 package models;
 
 import com.google.appengine.api.datastore.Entity;
+import com.google.appengine.api.datastore.Key;
+import com.google.appengine.api.datastore.KeyFactory;
 import com.google.appengine.labs.repackaged.org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -49,8 +51,9 @@ public class Training {
         this.exercises = exercises;
     }
 
-    public Entity toEntity(){
-        Entity entity = new Entity(Training.class.getName());
+    public Entity toEntity(long userId){
+        Key key = KeyFactory.createKey(Training.class.getName(), userId);
+        Entity entity = new Entity(Training.class.getName(), key);
         entity.setProperty(TITLE, this.title);
         entity.setProperty(DESCRIPTION, this.description);
         return entity;

@@ -1,7 +1,10 @@
 package servlets;
 
+import com.google.appengine.api.datastore.EntityNotFoundException;
 import controllers.DAOController;
 import models.Exercise;
+import models.Training;
+import models.User;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -13,9 +16,9 @@ import java.io.PrintWriter;
 import java.util.List;
 
 /**
- * Created by Chazz on 02/12/15.
+ * Created by Chazz on 15/12/15.
  */
-public class ExerciseServlet extends Servlet {
+public class UserServlet extends Servlet {
 
     private DAOController controller;
 
@@ -27,45 +30,34 @@ public class ExerciseServlet extends Servlet {
     }
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        logger.info("POST ExerciseServlet");
+        logger.info("POST UserServlet");
         PrintWriter out = response.getWriter();
-        int status = 400;
-        String answer = "";
-        try {
+        try{
             JSONObject json = new JSONObject(getBody(request));
-            this.controller.setExercise(new Exercise(json), json.getLong("trainingId"));
-            answer = "request successfully posted";
-            status = 200;
-        } catch (JSONException e) {
-            logger.warning("exception");
-            logger.warning(e.getMessage());
-            answer = "bad request";
-            status = 400;
+            this.controller.setUser(new User(json));
+            response.setStatus(HttpServletResponse.SC_OK);
+        } catch (JSONException e ){
+            out.print(e.getMessage());
+            response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
         } finally {
-            response.setStatus(status);
-            out.print(answer);
             out.flush();
         }
-
     }
 
-    /*
-     * Practiful rest
-     */
+
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        logger.info("GET ExerciseServlet");
-        String key = request.getParameter("key");
-
-        if(key != null) {
-            //Exercise exercise = this.controller.getExerciseByKey(key);
-            //logger.info(exercise.toString());
-        } else {
-            List<Exercise> exercises = this.controller.getExercises();
-            for(Exercise exercise : exercises) {
-                logger.info(exercise.toString());
+        logger.info("GET UserServlet");
+        String id = request.getParameter("id");
+        if(id != null) {
+            try {
+                User user = this.controller.getUserByGoogleId(Long.parseLong(id));
+                logger.info(user.toString());
+            } catch (EntityNotFoundException | JSONException e) {
+                e.printStackTrace();
             }
+        } else {
+            // no id
         }
-
     }
 
     @Override

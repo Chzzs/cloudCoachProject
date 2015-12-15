@@ -27,24 +27,21 @@ import java.util.Arrays;
 
 
 public class SignServlet extends Servlet {
-	
 
-	
-	
+	private final static String GOOGLE_CLIENT_ID = "313469799156-sfjdt8eqj20tj116ur441lk7atkou9lo.apps.googleusercontent.com";
+
 	
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
     	logger.info("POST SignServlet");
        	response.setContentType("application/json");
 
- 
     	HttpTransport transport = new NetHttpTransport();
     	JacksonFactory jsonFactory = new JacksonFactory();
     	
     	GoogleIdTokenVerifier verifier = new GoogleIdTokenVerifier.Builder(transport, jsonFactory)
-        .setAudience(Arrays.asList("313469799156-sfjdt8eqj20tj116ur441lk7atkou9lo.apps.googleusercontent.com"))
+        .setAudience(Arrays.asList(GOOGLE_CLIENT_ID))
         .build();
-    	
-    	
+
     
     	String idTokenString=request.getParameter("token");
     	GoogleIdToken idToken = null;

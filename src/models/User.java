@@ -1,6 +1,7 @@
 package models;
 
 import com.google.appengine.api.datastore.Entity;
+import com.google.appengine.api.datastore.EntityNotFoundException;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -15,12 +16,13 @@ public class User {
     private final static String FIRST_NAME = "firstName";
     private final static String LAST_NAME = "lastName";
     private final static String EMAIL = "email";
-    private final static String GOOGLE_ID = "googleId";
+    public final static String GOOGLE_ID = "googleId";
 
     private String firstName;
     private String lastName;
     private String email;
     private long googleId;
+    private long id;
 
     public User(String firstName, String lastName, String email, long googleId) {
         this.email = email;
@@ -29,11 +31,18 @@ public class User {
         this.googleId = googleId;
     }
 
+    public User(Entity entity) {
+        this.email = (String) entity.getProperty(EMAIL);
+        this.firstName = (String) entity.getProperty(FIRST_NAME);
+        this.lastName = (String) entity.getProperty(LAST_NAME);
+        this.googleId = (long) entity.getProperty(GOOGLE_ID);
+    }
+
     public User(JSONObject object) throws JSONException {
         this.email = (String) object.get(EMAIL);
         this.firstName = (String) object.get(FIRST_NAME);
         this.lastName = (String) object.get(LAST_NAME);
-        this.googleId = (long) object.get(GOOGLE_ID);
+        this.googleId = object.getLong(GOOGLE_ID);
     }
 
     public Entity toEntity() {
@@ -55,4 +64,15 @@ public class User {
     }
 
 
+    public void setId(long id) {
+        this.id = id;
+    }
+
+    public long getId() {
+        return this.id;
+    }
+    @Override
+    public String toString() {
+        return "User[email="+email+"]";
+    }
 }

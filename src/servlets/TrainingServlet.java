@@ -2,6 +2,7 @@ package servlets;
 
 
 import com.google.appengine.api.datastore.EntityNotFoundException;
+import com.google.appengine.labs.repackaged.org.json.JSONArray;
 import controllers.DAOController;
 import models.Training;
 import models.User;
@@ -32,12 +33,16 @@ public class TrainingServlet extends Servlet {
         PrintWriter out = response.getWriter();
         try{
             JSONObject json = new JSONObject(getBody(request));
-            this.controller.setTraining(new Training(json));
+            long googleId = json.getLong("googleId");
+            System.out.println(googleId);
+            Training training = new Training(json);
+
+            this.controller.setTrainingWithGoogleId(training, googleId);
+
             response.setStatus(HttpServletResponse.SC_OK);
-        } catch (JSONException e ){
+        } catch (EntityNotFoundException | JSONException e ){
             out.print(e.getMessage());
             response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-
         } finally {
             out.flush();
         }
@@ -46,16 +51,35 @@ public class TrainingServlet extends Servlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         logger.info("[GET] TrainingServlet");
-        String id = request.getParameter("id");
+        long googleId = Long.parseLong(request.getParameter("googleId"));
 
-        if(id != null) {
+        PrintWriter out = response.getWriter();
+        try {
+            List<Training> trainings =  this.controller.getTrainingsByGoogleId(googleId);
+            JSONArray array = new JSONArray();
+            for(Training training: trainings) {
+                array.put(training.toJSON());
+                System.out.println(training.toJSON());
+            }
+            System.out.println(array.toString());
+            out.write(array.toString());
+            response.setContentType("application/json");
+            response.setStatus(HttpServletResponse.SC_OK);
+        } catch (JSONException | EntityNotFoundException e ){
+            response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+            logger.warning(e.getMessage());
+        } finally {
+            out.flush();
+        }
+
+       /* if(id != null) {
             doGetWithId(request,response, Long.parseLong(id));
         } else {
             doGetWithoutId(request,response);
-        }
+        }*/
     }
 
-    private void doGetWithId(HttpServletRequest request, HttpServletResponse response, long id)
+  /*  private void doGetWithId(HttpServletRequest request, HttpServletResponse response, long id)
             throws ServletException, IOException {
         PrintWriter out = response.getWriter();
         try {
@@ -77,5 +101,5 @@ public class TrainingServlet extends Servlet {
         for(Training training : trainings) {
             logger.info(training.toString());
         }
-    }
+    }*/
 }
