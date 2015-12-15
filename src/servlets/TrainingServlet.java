@@ -28,8 +28,9 @@ public class TrainingServlet extends Servlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         logger.info("[GET] TrainingServlet");
         User trainee = new User("john", "doe", "john.doe@mail.com", "pwd", "trainee", new Date());
-        this.controller.setUser(trainee);
+    /*    this.controller.setUser(trainee);
         trainee = this.controller.getUserByName("john", "doe", "pwd");
         logger.info(trainee.toString());
+    */
     }
 }
