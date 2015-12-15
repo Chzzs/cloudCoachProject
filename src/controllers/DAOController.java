@@ -2,13 +2,11 @@ package controllers;
 
 import com.google.appengine.api.datastore.*;
 import models.Exercise;
+import models.Training;
 import models.User;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import static com.google.appengine.api.datastore.Query.*;
-import static com.google.appengine.api.datastore.Query.FilterOperator.*;
 /**
  * Created by Chazz on 02/12/15.
  */
@@ -21,38 +19,81 @@ public class DAOController {
         dataStore.put(entity);
     }
 
-    public void setExercice(Exercise exercise) {
+
+    /**
+     * stores an exercice as child of the training corresponding to trainingID.
+     * @param exercise
+     */
+    public void setExercise(Exercise exercise) {
         Entity entity = exercise.toEntity();
         dataStore.put(entity);
     }
 
-    public Exercise getExerciseByKey(String string) {
-        Key key = KeyFactory.createKey("Exercise", string);
-        System.out.println(key);
-        Filter filter = new FilterPredicate(Entity.KEY_RESERVED_PROPERTY, EQUAL, key);
-        Query query = new Query("Exercise").setFilter(filter);
+    public void setTraining(Training training) {
+        Entity entity = training.toEntity();
+        dataStore.put(entity);
+    }
+
+
+    public List<Training> getTrainings(){
+        List<Training> trainings = new ArrayList<>();
+
+        Query query = new Query(Training.class.getName());
         PreparedQuery preparedQuery = dataStore.prepare(query);
-        Entity entity = preparedQuery.asSingleEntity();
-        String title = (String) entity.getProperty("title");
-        String description = (String) entity.getProperty("description");
-        int duration = (int) entity.getProperty("duration");
-        return new Exercise(title, description, duration);
+
+        for(Entity entity : preparedQuery.asIterable())
+            trainings.add(new Training(entity));
+
+
+        return trainings;
+    }
+
+    public Training getTrainingById(long id) throws EntityNotFoundException {
+
+        /* Creates key with given id */
+        Key key = KeyFactory.createKey(Training.class.getName(), id);
+        Entity entity = dataStore.get(key);
+
+        /* Creates model */
+        Training training = new Training(entity);
+
+        /* Fetches children */
+        training.setExercises(getExercisesByTrainingId(id));
+
+        return training;
+    }
+
+
+    public List<Exercise> getExercisesByTrainingId(long id){
+        List<Exercise> exercises = new ArrayList<>();
+
+        /* Creates key with given id */
+        Key key = KeyFactory.createKey(Training.class.getName(), id);
+
+        /* Prepares query and execute it */
+        Query query = new Query(Exercise.class.getName());
+        query.setAncestor(key);
+        PreparedQuery preparedQuery = dataStore.prepare(query);
+
+        /* Parses result */
+        for(Entity entity : preparedQuery.asIterable())
+            exercises.add(new Exercise(entity));
+
+        return exercises;
     }
 
     public List<Exercise> getExercises() {
         List<Exercise> exercises = new ArrayList<>();
-        Query query = new Query("Exercise");
+
+        Query query = new Query(Exercise.class.getName());
         PreparedQuery preparedQuery = dataStore.prepare(query);
 
-        for(Entity entity : preparedQuery.asIterable()){
-            String title = (String) entity.getProperty("title");
-            String description = (String) entity.getProperty("description");
-            int duration = (int) entity.getProperty("duration");
-            exercises.add(new Exercise(title, description, duration));
+        for(Entity entity : preparedQuery.asIterable()) {
+            exercises.add(new Exercise(entity));
         }
-
         return exercises;
     }
+
 
 /*
     public boolean checkUserByEmail(String email, String password) {

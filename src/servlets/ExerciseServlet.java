@@ -10,6 +10,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.List;
 
 /**
  * Created by Chazz on 02/12/15.
@@ -31,13 +32,13 @@ public class ExerciseServlet extends Servlet {
         int status = 400;
         String answer = "";
         try {
-            JSONObject body = new JSONObject(getBody(request));
-            Exercise exercise = createExercise(body);
-            this.controller.setExercice(exercise);
+            JSONObject json = new JSONObject(getBody(request));
+            this.controller.setExercise(new Exercise(json));
             answer = "request successfully posted";
             status = 200;
         } catch (JSONException e) {
             logger.warning("exception");
+            logger.warning(e.getMessage());
             answer = "bad request";
             status = 400;
         } finally {
@@ -48,16 +49,6 @@ public class ExerciseServlet extends Servlet {
 
     }
 
-    private Exercise createExercise(JSONObject json) throws JSONException {
-        String title = (String) json.get("title");
-        String description = (String) json.get("description");
-        String domain = (String) json.get("domain");
-        int duration = (int) json.get("duration");
-
-        return new Exercise(title, description, duration);
-    }
-
-
     /*
      * Practiful rest
      */
@@ -66,10 +57,13 @@ public class ExerciseServlet extends Servlet {
         String key = request.getParameter("key");
 
         if(key != null) {
-            Exercise exercise = this.controller.getExerciseByKey(key);
-            logger.info(exercise.toString());
+            //Exercise exercise = this.controller.getExerciseByKey(key);
+            //logger.info(exercise.toString());
         } else {
-            this.controller.getExercises();
+            List<Exercise> exercises = this.controller.getExercises();
+            for(Exercise exercise : exercises) {
+                logger.info(exercise.toString());
+            }
         }
 
     }
