@@ -56,12 +56,12 @@ public class TrainingServlet extends Servlet {
         PrintWriter out = response.getWriter();
         try {
             List<Training> trainings =  this.controller.getTrainingsByGoogleId(googleId);
+
             JSONArray array = new JSONArray();
-            for(Training training: trainings) {
+            for(Training training: trainings)
                 array.put(training.toJSON());
-                System.out.println(training.toJSON());
-            }
-            System.out.println(array.toString());
+
+
             out.write(array.toString());
             response.setContentType("application/json");
             response.setStatus(HttpServletResponse.SC_OK);
