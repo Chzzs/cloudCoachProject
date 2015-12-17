@@ -25,12 +25,8 @@
         <servlet-class>servlets.TrainingServlet</servlet-class>
     </servlet>
     <servlet>
-        <servlet-name>UserServlet</servlet-name>
-        <servlet-class>servlets.UserServlet</servlet-class>
-    </servlet>
-    <servlet>
-        <servlet-name>ExerciseServlet</servlet-name>
-        <servlet-class>servlets.ExerciseServlet</servlet-class>
+        <servlet-name>ExerciceServlet</servlet-name>
+        <servlet-class>servlets.ExerciceServlet</servlet-class>
     </servlet>
 
 
@@ -45,8 +41,8 @@
         <url-pattern>/search</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
-        <servlet-name>ExerciseServlet</servlet-name>
-        <url-pattern>/exercise</url-pattern>
+        <servlet-name>ExerciceServlet</servlet-name>
+        <url-pattern>/exercice</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
         <servlet-name>SignServlet</servlet-name>
@@ -55,10 +51,6 @@
     <servlet-mapping>
         <servlet-name>TrainingServlet</servlet-name>
         <url-pattern>/training</url-pattern>
-    </servlet-mapping>
-    <servlet-mapping>
-        <servlet-name>UserServlet</servlet-name>
-        <url-pattern>/user</url-pattern>
     </servlet-mapping>
 
     <!-- Tasks mapping -->
