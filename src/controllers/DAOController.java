@@ -1,27 +1,115 @@
 package controllers;
 
 import com.google.appengine.api.datastore.*;
+import com.google.appengine.api.memcache.MemcacheService;
+import com.google.appengine.api.memcache.jsr107cache.GCacheFactory;
 import models.Exercise;
 import models.Training;
 import models.User;
 import org.json.JSONException;
 
-import java.util.ArrayList;
-import java.util.List;
+import javax.cache.Cache;
+import javax.cache.CacheException;
+import javax.cache.CacheFactory;
+import javax.cache.CacheManager;
+import java.util.*;
+
 /**
- * Created by Chazz on 02/12/15.
+ * Created by Chazz on 30/12/15.
  */
 public class DAOController {
 
-    DatastoreService dataStore = DatastoreServiceFactory.getDatastoreService();
+    private static final String MESSAGE = "message";
 
+    /* singleton */
+    private static DAOController instance = new DAOController();
+    public static DAOController getInstance() {
+        return instance;
+    }
 
+    /* attributes */
+    private final DatastoreService dataStore;
+    private Cache cache;
+
+    /**
+     * Initialise the singleton DAO Controller.
+     */
+    private DAOController() {
+
+        this.dataStore = DatastoreServiceFactory.getDatastoreService();
+        this.cache = null;
+
+        /* init cache */
+
+        Map properties = new HashMap<>();
+        properties.put(GCacheFactory.EXPIRATION_DELTA, 3600);
+        properties.put(MemcacheService.SetPolicy.ADD_ONLY_IF_NOT_PRESENT, true);
+
+        try {
+            CacheFactory factory = CacheManager.getInstance().getCacheFactory();
+            this.cache = factory.createCache(properties);
+        } catch (CacheException e ){
+            /* boom */
+            e.printStackTrace();
+        }
+    }
+
+    /*
+     * List of all actions
+     */
+
+    /**
+     * Stores an user
+     * @param user
+     */
     public void setUser(User user) {
         Entity entity = user.toEntity();
         dataStore.put(entity);
     }
 
-    public User getUserByGoogleId(long googleId) throws  EntityNotFoundException, JSONException{
+    /**
+     * Stores a new welcome message.
+     * @param message
+     */
+
+    public void setWelcomeMessage(String message){
+        Entity entity = new Entity(String.class.getName());
+        entity.setProperty("message", message);
+        entity.setProperty("createdAt", new Date());
+        dataStore.put(entity);
+    }
+
+    /**
+     * Fetches the last welcome message added, first try to find it in the cache.
+     * If not present, puts it in.
+     * @return the current welcome message
+     */
+    public String getWelcomeMessage() {
+        /* searches for the message in the cache */
+        String message = (String ) cache.get(MESSAGE);
+
+        /* if not cached */
+        if(null == message) {
+            Query query = new Query(String.class.getName());
+            query.addSort("createdAt", Query.SortDirection.DESCENDING);
+            PreparedQuery preparedQuery = dataStore.prepare(query);
+            for(Entity entity : preparedQuery.asIterable()){
+                message = (String) entity.getProperty("message");
+                break;
+            }
+            cache.put(MESSAGE, message);
+        }
+        return message;
+    }
+
+    /**
+     * Fetches an user by its googleId.
+     * @param googleId
+     * @return the user's profile
+     * @throws EntityNotFoundException
+     * @throws JSONException
+     */
+    public User getUserByGoogleId(long googleId) throws  EntityNotFoundException, JSONException {
 
         /* Prepares query and execute it */
         Query query = new Query(User.class.getName());
@@ -39,19 +127,9 @@ public class DAOController {
         return user;
     }
 
-    public User getUserById(long id) throws  EntityNotFoundException, JSONException{
-        Key key = KeyFactory.createKey(User.class.getName(), id);
-        Entity entity = dataStore.get(key);
-
-        /* Creates model */
-        User user  = new User(entity);
-
-        return user;
-    }
-
 
     /**
-     * stores an exercice as child of the training corresponding to trainingID.
+     * Stores an exercise as a child of  training corresponding to trainingID.
      * @param exercise
      */
     public void setExercise(Exercise exercise, long trainingId) {
@@ -59,6 +137,13 @@ public class DAOController {
         dataStore.put(entity);
     }
 
+    /**
+     * Stores a training with the registered googleId.
+     * @param training
+     * @param googleId
+     * @throws EntityNotFoundException
+     * @throws JSONException
+     */
     public void setTrainingWithGoogleId(Training training, long googleId) throws EntityNotFoundException, JSONException {
         User user = getUserByGoogleId(googleId);
         long id = user.getId();
@@ -68,20 +153,34 @@ public class DAOController {
         dataStore.put(entity);
     }
 
-
+    /**
+     * Fetches the list of all trainings.
+     * @return the list of all trainings.
+     */
     public List<Training> getTrainings(){
         List<Training> trainings = new ArrayList<>();
 
         Query query = new Query(Training.class.getName());
         PreparedQuery preparedQuery = dataStore.prepare(query);
 
-        for(Entity entity : preparedQuery.asIterable())
-            trainings.add(new Training(entity));
-
+        for(Entity entity : preparedQuery.asIterable()) {
+            Training training = new Training(entity);
+            long trainingId = entity.getKey().getId();
+            training.setExercises(getExercisesByTrainingId(trainingId));
+            trainings.add(training);
+        }
 
         return trainings;
     }
 
+    /**
+     * Fetches a list of trainings according to the given googleId.
+     * First retrieves info about the user and calls DAOController#getTrainingsByUserId
+     * @param googleId
+     * @return the list of trainings corresponding to the googleId
+     * @throws EntityNotFoundException
+     * @throws JSONException
+     */
     public List<Training> getTrainingsByGoogleId(long googleId) throws EntityNotFoundException, JSONException {
         User user = getUserByGoogleId(googleId);
         long userId = user.getId();
@@ -89,6 +188,13 @@ public class DAOController {
         return getTrainingsByUserId(userId);
     }
 
+    /**
+     * Gets the trainings of an user.
+     * @param userId
+     * @return the training list of an user.
+     * @throws EntityNotFoundException
+     * @throws JSONException
+     */
     private List<Training> getTrainingsByUserId(long userId) throws EntityNotFoundException, JSONException {
         List<Training> trainings = new ArrayList<>();
           /* Creates key with given id */
@@ -100,28 +206,21 @@ public class DAOController {
         PreparedQuery preparedQuery = dataStore.prepare(query);
 
         /* Parses result */
-        for(Entity entity : preparedQuery.asIterable())
-            trainings.add(new Training(entity));
-
+        for(Entity entity : preparedQuery.asIterable()) {
+            Training training = new Training(entity);
+            long trainingId = entity.getKey().getId();
+            training.setExercises(getExercisesByTrainingId(trainingId));
+            trainings.add(training);
+        }
         return trainings;
     }
 
-    private Training getTrainingById(long id) throws EntityNotFoundException {
 
-        /* Creates key with given id */
-        Key key = KeyFactory.createKey(Training.class.getName(), id);
-        Entity entity = dataStore.get(key);
-
-        /* Creates model */
-        Training training = new Training(entity);
-
-        /* Fetches children */
-        training.setExercises(getExercisesByTrainingId(id));
-
-        return training;
-    }
-
-
+    /**
+     * Fetches a list of exercises according to the given trainingId.
+     * @param id the training id
+     * @return the list of Exercises of this training.
+     */
     public List<Exercise> getExercisesByTrainingId(long id){
         List<Exercise> exercises = new ArrayList<>();
 
@@ -140,6 +239,10 @@ public class DAOController {
         return exercises;
     }
 
+    /**
+     * Lists all the exercises presents.
+     * @return the list of all the exercises.
+     */
     public List<Exercise> getExercises() {
         List<Exercise> exercises = new ArrayList<>();
 
@@ -151,36 +254,4 @@ public class DAOController {
         }
         return exercises;
     }
-
-
-/*
-    public boolean checkUserByEmail(String email, String password) {
-        Filter emailFilter = new FilterPredicate("email", EQUAL, email);
-        return false;
-    }
-
-
-
-
-    public User getUserByName(String firstname, String lastname, String password) {
-
-        Filter firstnameFilter = new FilterPredicate("firstname", EQUAL, firstname);
-        Filter lastnameFilter = new FilterPredicate("lastname", EQUAL, lastname);
-        Filter passwordFilter = new FilterPredicate("password", EQUAL, password);
-        Filter nameFilter =  CompositeFilterOperator.and( firstnameFilter, lastnameFilter, passwordFilter);
-
-        Query query = new Query("User").setFilter(nameFilter);
-        PreparedQuery preparedQuery = dataStore.prepare(query);
-
-        Entity entity = preparedQuery.asSingleEntity();
-
-        String email = (String) entity.getProperty("email");
-        String role = (String) entity.getProperty("role");
-        Date birthdate =(Date) entity.getProperty("birthdate");
-
-        return new User(firstname,lastname,email,password,role,birthdate);
-    }
-*/
-
-
 }

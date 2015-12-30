@@ -15,17 +15,19 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.Date;
+import java.util.Enumeration;
 import java.util.List;
 
 /**
  * Created by Chazz on 02/12/15.
  */
 public class TrainingServlet extends Servlet {
-    private DAOController controller;
+
+    private final static String GOOGLE_ID="googleId";
+
     @Override
     public void init() throws ServletException {
         super.init();
-        this.controller = new DAOController();
     }
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -51,16 +53,44 @@ public class TrainingServlet extends Servlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         logger.info("[GET] TrainingServlet");
-        long googleId = Long.parseLong(request.getParameter("googleId"));
 
+
+        if(request.getParameter(GOOGLE_ID) != null) {
+            doGetWithGoogleId(request, response);
+        } else {
+            doGetWithoutGoogleId(request, response);
+        }
+
+    }
+
+    private void doGetWithoutGoogleId(HttpServletRequest request, HttpServletResponse response) throws IOException {
         PrintWriter out = response.getWriter();
-        try {
-            List<Training> trainings =  this.controller.getTrainingsByGoogleId(googleId);
 
+        try {
+            List<Training> trainings =  this.controller.getTrainings();
             JSONArray array = new JSONArray();
             for(Training training: trainings)
                 array.put(training.toJSON());
+            out.write(array.toString());
+            response.setContentType("application/json");
+            response.setStatus(HttpServletResponse.SC_OK);
+        } catch (JSONException e ){
+            response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+            logger.warning(e.getMessage());
+        } finally {
+            out.flush();
+        }
+    }
 
+    private void doGetWithGoogleId(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        PrintWriter out = response.getWriter();
+        long googleId = Long.parseLong(request.getParameter(GOOGLE_ID));
+
+        try {
+            List<Training> trainings =  this.controller.getTrainingsByGoogleId(googleId);
+            JSONArray array = new JSONArray();
+            for(Training training: trainings)
+                array.put(training.toJSON());
 
             out.write(array.toString());
             response.setContentType("application/json");
@@ -71,35 +101,5 @@ public class TrainingServlet extends Servlet {
         } finally {
             out.flush();
         }
-
-       /* if(id != null) {
-            doGetWithId(request,response, Long.parseLong(id));
-        } else {
-            doGetWithoutId(request,response);
-        }*/
     }
-
-  /*  private void doGetWithId(HttpServletRequest request, HttpServletResponse response, long id)
-            throws ServletException, IOException {
-        PrintWriter out = response.getWriter();
-        try {
-            Training training =  this.controller.getTrainingById(id);
-            logger.info(training.toString());
-            out.write(training.toJSON().toString(2));
-            response.setContentType("application/json");
-            response.setStatus(HttpServletResponse.SC_OK);
-        } catch (JSONException | EntityNotFoundException e ){
-            response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-            logger.warning(e.getMessage());
-        } finally {
-            out.flush();
-        }
-    }
-
-    private void doGetWithoutId(HttpServletRequest request, HttpServletResponse response) {
-        List<Training>  trainings = this.controller.getTrainings();
-        for(Training training : trainings) {
-            logger.info(training.toString());
-        }
-    }*/
 }

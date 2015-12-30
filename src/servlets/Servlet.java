@@ -1,5 +1,8 @@
 package servlets;
 
+import controllers.DAOController;
+
+import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import java.io.BufferedReader;
@@ -14,6 +17,15 @@ import java.util.logging.Logger;
 public abstract class Servlet extends HttpServlet {
 
     protected Logger logger = Logger.getLogger(Servlet.class.getName());
+    protected static final String CONTENT_TYPE = "application/json";
+
+    protected DAOController controller;
+
+    @Override
+    public void init() throws ServletException {
+        super.init();
+        this.controller = DAOController.getInstance();
+    }
 
     public static String getBody(HttpServletRequest request) throws IOException {
 

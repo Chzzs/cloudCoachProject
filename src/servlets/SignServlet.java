@@ -55,22 +55,22 @@ public class SignServlet extends Servlet {
 			
  
 	    	if (idToken != null) {
-	      	  Payload payload = idToken.getPayload();
+				Payload payload = idToken.getPayload();
 	      	    System.out.println("User ID: " + payload.getSubject());
 	      	    System.out.println("User email: " + payload.getEmail());
 	        	PrintWriter out = response.getWriter();
 
-	      	  JSONObject jsonToSend;
-	  		jsonToSend=new JSONObject();
-	  		try {
-				jsonToSend.put("email", payload.getEmail());
-				jsonToSend.put("tokenId", payload.getSubject());
+	      	  	JSONObject jsonToSend;
+	  			jsonToSend=new JSONObject();
+				try {
+					jsonToSend.put("email", payload.getEmail());
+					jsonToSend.put("tokenId", payload.getSubject());
 
-				out.write(jsonToSend.toString());
-				out.flush();
-			} catch (JSONException e) {
-				e.printStackTrace();
-			}
+					out.write(jsonToSend.toString());
+					out.flush();
+				} catch (JSONException e) {
+					e.printStackTrace();
+				}
 
 	      	} else {
 	      	  System.out.println("Invalid ID token.");

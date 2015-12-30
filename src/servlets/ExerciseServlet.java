@@ -17,13 +17,9 @@ import java.util.List;
  */
 public class ExerciseServlet extends Servlet {
 
-    private DAOController controller;
-
     @Override
     public void init() throws ServletException {
         super.init();
-        //TODO maybe a singleton ?
-        this.controller = new DAOController();
     }
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {

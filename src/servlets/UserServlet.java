@@ -20,13 +20,10 @@ import java.util.List;
  */
 public class UserServlet extends Servlet {
 
-    private DAOController controller;
 
     @Override
     public void init() throws ServletException {
         super.init();
-        //TODO maybe a singleton ?
-        this.controller = new DAOController();
     }
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -43,7 +40,6 @@ public class UserServlet extends Servlet {
             out.flush();
         }
     }
-
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         logger.info("GET UserServlet");
