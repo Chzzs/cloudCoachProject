@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" ng-app="researchApp">
   <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -9,7 +9,7 @@
     <!-- Bootstrap -->
     <link href="css/bootstrap.min.css" rel="stylesheet">
     <link href="css/js.css" rel="stylesheet">
-      
+     <base href="/">
 
   </head>
   <body>
@@ -34,17 +34,27 @@
       </nav>
       <!-- ------------------------------------------- HEADER ZONE END ------------------------------------------- -->
       
-      <div id="searchResults"></div>
-      
+      <div class="row">
+    <div class="col-md-10 col-md-offset-1">
+
+      <div id="trainingResearch" ng-controller="researchResultCrt" ng-show="trainingBool"> 
+      <h1> Training </h1>     
+        <div   ng-repeat="training in trainingList "> 
+            <p> Title: {{ training.title | uppercase }} Duration: {{ training.duration }}</p>
+          </div>
+       </div>
+
+      <div id="exerciceResearch" ng-controller="researchResultCrt" ng-show="exerciceList.length"> 
+      <h1> Exercice </h1>     
+        <div   ng-repeat="exercice in exerciceList "> 
+            <p> Title: {{ exercice.title | uppercase }} Duration: {{ exercice.duration }}</p>
+          </div>
+       </div>
+      </div>
+</div>
       
       <!-- ------------------------------------------- FOOTER ZONE ------------------------------------------- -->
       <nav class="navbar navbar-inverse navbar-fixed-bottom" role="navigation">
-        <div class=" col-md-10 col-sm-10 col-xs-10 ">
-            <form class="navbar-form navbar-left"  style="width:100%" role="search">
-                <button type="submit" class="btn btn-danger"> <span class="glyphicon glyphicon-plus-sign"></span> </button>
-               <label style="color:white">Add a Training Plan</label>
-          </form>
-        </div>
       </nav>
       <!-- ------------------------------------------- FOOTER ZONE END ------------------------------------------- -->
     
@@ -52,7 +62,11 @@
     <script src="js/jquery-1.11.1.min.js"></script>
     <!-- Include all compiled plugins (below), or include individual files as needed -->
     <script src="js/bootstrap.min.js"></script>
-   
-    <script type="js/searchResult.js"></script>
+    <script src="js/angular.min.js"></script>
+        <script src="js/angular-route.min.js"></script>
+    <script src="js/searchResult.js"></script>
+    <script src="js/appResearch/app.js"></script>
+    <script src="js/appResearch/researchResultCrt.js"></script>
+
   </body>
 </html>

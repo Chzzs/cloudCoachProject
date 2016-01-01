@@ -1,34 +1,8 @@
-$( document ).ready(function() {
-	
-var localUser = sessionStorage.getItem("localUser");
-var user;
-if(localUser === null){//not logged
-console.log("no data in localstorage");
-$( "#signoutnav" ).hide();
-$( "#signinnav" ).show();
-$( "#welcommessage" ).hide();
-
-}
-else{
-	user=JSON.parse(localUser);
-	console.log("user id storage detected : "+user.tokenId);
-	
-	$( "#welcommessage" ).html("Welcome "+user.email);
-	
-	$( "#signinnav" ).hide();
-	$( "#signoutnav" ).show();
-	$( "#welcommessage" ).show();
- 
-}
-});
+var text = '[{"exercices":"[]","description":"super trainning","title":"training for big guys"},{"exercices":"[]","description":"shit trainning","title":"training for Nerd"}]';
 
 
+console.log("coucou");
 
-$.get("training",
-  		  {
-  		    googleid:user.tokenId
-  		  },
-  		  function(data,status){
-  		
-  		    console.log(data);
-  		  });
+var jsonobj =JSON.parse(text);
+
+console.log(jsonobj[0].description);
