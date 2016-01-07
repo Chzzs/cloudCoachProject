@@ -86,7 +86,7 @@ public class DAOController {
      */
     public String getWelcomeMessage() {
         /* searches for the message in the cache */
-        String message = (String ) cache.get(MESSAGE);
+        String message = (String) cache.get(MESSAGE);
 
         /* if not cached */
         if(null == message) {
