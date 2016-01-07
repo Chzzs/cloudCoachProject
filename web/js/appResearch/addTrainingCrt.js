@@ -12,13 +12,13 @@ function trainingFunction($scope,$http){
 $scope.trainingToPost={};
 
     $scope.addExercice= function() {
-        var duration= ($scope.exe.Hour * 3600)+($scope.exe.Min*60)+($scope.exe.Sec);
+        var duration= Number(($scope.exe.hour * 3600))+Number(($scope.exe.min*60))+Number(($scope.exe.sec));
+		console.log(duration);
     	$scope.exerciceList.push({
-    		title: $scope.exe.Title,
+    		title: $scope.exe.title,
     		duration:duration,
-    		desc:$scope.exe.Desc
+    		desc:$scope.exe.desc
     	})
-
     };
 
     $scope.deleteExercice= function(idx){
@@ -30,9 +30,9 @@ $scope.trainingToPost={};
     	$scope.trainingToPost={
     		title:$scope.training.title,
     		desc:$scope.training.desc,
-    		sport:$scope.sport,
+    		sport:$scope.training.sport,
     		exeList:$scope.exerciceList
 
     	};
-    }
+    };
 };
