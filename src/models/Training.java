@@ -38,6 +38,7 @@ public class Training {
         this.description = (String) entity.getProperty(Training.DESCRIPTION);
 
         this.exercises = new ArrayList<>();
+
     }
 
     public int getDuration(){
@@ -57,6 +58,12 @@ public class Training {
         entity.setProperty(TITLE, this.title);
         entity.setProperty(DESCRIPTION, this.description);
         return entity;
+    }
+
+    public boolean contains(String filter){
+        if (this.title.toLowerCase().contains(filter.toLowerCase()))
+            return true;
+        return false;
     }
 
     public JSONObject toJSON() throws JSONException {

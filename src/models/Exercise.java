@@ -32,6 +32,12 @@ public class Exercise {
         this.trainingId = json.getLong(TRAINING_ID);
     }
 
+    public boolean contains(String filter){
+        if(this.title.toLowerCase().contains(filter.toLowerCase()))
+            return true;
+        return false;
+    }
+
     public Exercise(Entity entity) {
         if(!entity.getKind().equals(Exercise.class.getName()))
             throw new IllegalArgumentException();

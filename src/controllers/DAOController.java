@@ -254,4 +254,36 @@ public class DAOController {
         }
         return exercises;
     }
+
+    public List<Exercise> getExercisesWithFilter(String filter) {
+        List<Exercise> exercises = new ArrayList<>();
+
+        Query query = new Query(Exercise.class.getName());
+        PreparedQuery preparedQuery = dataStore.prepare(query);
+
+        for(Entity entity : preparedQuery.asIterable()) {
+            Exercise exercise = new Exercise(entity);
+            if(exercise.contains(filter))
+                exercises.add(exercise);
+        }
+        return exercises;
+    }
+
+    public List<Training> getTrainingsWithFilter(String filter) {
+        List<Training> trainings = new ArrayList<>();
+
+        Query query = new Query(Training.class.getName());
+        PreparedQuery preparedQuery = dataStore.prepare(query);
+
+        for(Entity entity : preparedQuery.asIterable()) {
+            Training training = new Training(entity);
+            if(training.contains(filter)){
+                long trainingId = entity.getKey().getId();
+                training.setExercises(getExercisesByTrainingId(trainingId));
+                trainings.add(training);
+
+            }
+        }
+        return trainings;
+    }
 }

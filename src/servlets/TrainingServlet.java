@@ -40,7 +40,6 @@ public class TrainingServlet extends Servlet {
             Training training = new Training(json);
 
             this.controller.setTrainingWithGoogleId(training, googleId);
-
             response.setStatus(HttpServletResponse.SC_OK);
         } catch (EntityNotFoundException | JSONException e ){
             out.print(e.getMessage());
