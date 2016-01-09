@@ -35,25 +35,28 @@
       </nav>
       <!-- ------------------------------------------- HEADER ZONE END ------------------------------------------- -->
       
-      
+
      <form ng-controller="resultDetailCrt">
+
             <div class=" col-md-1 col-sm-0 col-xs-0 " ></div>     
         <div class=" col-md-11 col-sm-12 col-xs-12 " >
-                <table class="table table-striped table-condensed">
+            <h1>{{training.title}}</h1>
+            <h3>{{training.desc}}</h3>
+                <table class="table table-striped table-condensed" ng-repeat="ex in training.exeList">
                     <tr>
                         <td class=" col-md-12 col-sm-12 col-xs-12">
                         <div class="row">
                             <div class=" col-md-3 col-sm-12 col-xs-12 ">
-                                <h3>running warm-up</h3>
+                                <h3>{{ex.title}}</h3>
                             </div>
                             <div class=" col-md-1 col-sm-2 col-xs-2 ">
-                                <p id="totalTimeValue" style="margin-top:25px"><span class="glyphicon glyphicon-time"></span> 0:20:00</p>
+                                <p id="totalTimeValue" style="margin-top:25px"><span class="glyphicon glyphicon-time"></span>{{ex.duration/3600 | number:0}} H {{(ex.duration%3600)/60 | number:0}} M {{ex.duration%60}} S</p>
                             </div>
                         </div>
                         <div class="row">
                             <div class=" col-md-1 col-sm-0 col-xs-0 " ></div>
                             <div class=" col-md-6 col-sm-12 col-xs-12 ">
-                                <p>Ideoque fertur neminem aliquando ob haec vel similia poenae addictum oblato de more elogio revocari iussisse, quod inexorabiles quoque principes factitarunt. et exitiale hoc vitium, quod in aliis non numquam intepescit, in illo aetatis progressu effervescebat, obstinatum eius propositum accendente adulatorum cohorte.</p>
+                                <p>{{ex.desc}}</p>
                             </div>
                             <div class=" col-md-3 col-sm-12 col-xs-12 ">
                                 <div class=" col-md-12 col-sm-12 col-xs-12 ">
@@ -79,82 +82,7 @@
                         </td>
                     </tr>
                     
-                    <tr>
-                        <td class=" col-md-12 col-sm-12 col-xs-12">
-                        <div class="row">
-                            <div class=" col-md-3 col-sm-12 col-xs-12 ">
-                                <h3>running warm-up</h3>
-                            </div>
-                            <div class=" col-md-1 col-sm-2 col-xs-2 ">
-                                <p id="totalTimeValue" style="margin-top:25px"><span class="glyphicon glyphicon-time"></span> 0:20:00</p>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class=" col-md-1 col-sm-0 col-xs-0 " ></div>
-                            <div class=" col-md-6 col-sm-12 col-xs-12 ">
-                                <p>Ideoque fertur neminem aliquando ob haec vel similia poenae addictum oblato de more elogio revocari iussisse, quod inexorabiles quoque principes factitarunt. et exitiale hoc vitium, quod in aliis non numquam intepescit, in illo aetatis progressu effervescebat, obstinatum eius propositum accendente adulatorum cohorte.</p>
-                            </div>
-                            <div class=" col-md-3 col-sm-12 col-xs-12 ">
-                                <div class=" col-md-12 col-sm-12 col-xs-12 ">
-                                    <div id="flipcountdownbox2">                            
-                                    </div>
-                                </div>
-                                <div class=" col-md-12 col-sm-12 col-xs-12 centered">
-                                    <div class="btn-group">
-                                        <button type="button" class="btn btn-default " ><span class="glyphicon glyphicon-play"></span> </button>
-                                        <button type="button" class="btn btn-default " > <span class="glyphicon glyphicon-pause"></span> </button>
-                                        <button type="button" class="btn btn-default " > <span class="glyphicon glyphicon-stop"></span> </button>
-                                    </div>
-                                    <button type="button" class="btn btn-default " > <span class="glyphicon glyphicon-repeat"></span> </button>
-                                </div>
-                                
-                            </div>
-                            
-                        </div>
-                            <div class=" col-md-2 ol-sm-5 col-xs-12 text-center" >
-                                <button type="submit" class="btn btn-success btn-lg" disabled="disabled"> <span class="glyphicon glyphicon-ok"></span> </button>    
-                                <button type="submit" class="btn btn-danger btn-sm" disabled="disabled"> <span class="glyphicon glyphicon-fast-forward"></span> </button>
-                            </div>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td class=" col-md-12 col-sm-12 col-xs-12">
-                        <div class="row">
-                            <div class=" col-md-3 col-sm-12 col-xs-12 ">
-                                <h3>running warm-up</h3>
-                            </div>
-                            <div class=" col-md-1 col-sm-2 col-xs-2 ">
-                                <p id="totalTimeValue" style="margin-top:25px"><span class="glyphicon glyphicon-time"></span> 0:20:00</p>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class=" col-md-1 col-sm-0 col-xs-0 " ></div>
-                            <div class=" col-md-6 col-sm-12 col-xs-12 ">
-                                <p>Ideoque fertur neminem aliquando ob haec vel similia poenae addictum oblato de more elogio revocari iussisse, quod inexorabiles quoque principes factitarunt. et exitiale hoc vitium, quod in aliis non numquam intepescit, in illo aetatis progressu effervescebat, obstinatum eius propositum accendente adulatorum cohorte.</p>
-                            </div>
-                            <div class=" col-md-3 col-sm-12 col-xs-12 ">
-                                <div class=" col-md-12 col-sm-12 col-xs-12 ">
-                                    <div id="flipcountdownbox3">                            
-                                    </div>
-                                </div>
-                                <div class=" col-md-12 col-sm-12 col-xs-12 centered">
-                                    <div class="btn-group">
-                                        <button type="button" class="btn btn-default " ><span class="glyphicon glyphicon-play"></span> </button>
-                                        <button type="button" class="btn btn-default " > <span class="glyphicon glyphicon-pause"></span> </button>
-                                        <button type="button" class="btn btn-default " > <span class="glyphicon glyphicon-stop"></span> </button>
-                                    </div>
-                                    <button type="button" class="btn btn-default " > <span class="glyphicon glyphicon-repeat"></span> </button>
-                                </div>
-                                
-                            </div>
-                            
-                        </div>
-                            <div class=" col-md-2 ol-sm-5 col-xs-12 text-center" >
-                                <button type="submit" class="btn btn-success btn-lg" disabled="disabled"> <span class="glyphicon glyphicon-ok"></span> </button>    
-                                <button type="submit" class="btn btn-danger btn-sm" disabled="disabled"> <span class="glyphicon glyphicon-fast-forward"></span> </button>
-                            </div>
-                        </td>
-                    </tr>
+
                       
                 </table>
              </div>
@@ -183,11 +111,16 @@
       <!-- ------------------------------------------- FOOTER ZONE END ------------------------------------------- -->
     
     <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
-    <script src="../js/vendors/jquery.min.js"></script>
-    <!-- Include all compiled plugins (below), or include individual files as needed -->
-    <script src="../js/vendors/bootstrap.min.js"></script>
-    <script src="../lib/select2-3.5.1/select2.min.js"></script>
+      <script src="../js/vendors/jquery.min.js"></script>
+      <script src="../js/vendors/bootstrap.min.js"></script>
+
+      <script src="../js/vendors/angular.min.js"></script>
+      <script src="../js/vendors/angular-cookies.min.js"></script>
+
+      <script src="../js/vendors/angular-route.min.js"></script>
     <script src="../lib/flipcountdown-master/jquery.flipcountdown.js"></script>
+      <script src="../js/modules/app.js"></script>
+      <script src="../js/controllers/resultDetailCrt.js"></script>
 
              
   </body>
