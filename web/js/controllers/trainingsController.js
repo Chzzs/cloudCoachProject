@@ -41,7 +41,7 @@ function trainingFunction($scope,$http, $window){
 		training.exercises = $scope.exercises;
 		$http({
 			'method': 'POST',
-			'url': 'trainings',
+			'url': '../trainings',
 			'data': {
 				'training': training,
 				'googleId': '12'
