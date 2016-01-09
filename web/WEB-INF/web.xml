@@ -36,6 +36,15 @@
         <servlet-name>WelcomeServlet</servlet-name>
         <servlet-class>servlets.WelcomeServlet</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>RegisterTrainingTask</servlet-name>
+        <servlet-class>tasks.RegisterTrainingsTask</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>RegisterExerciseTask</servlet-name>
+        <servlet-class>tasks.RegisterExercisesTask</servlet-class>
+    </servlet>
+
 
 
     <!-- Servlets mapping -->
@@ -68,19 +77,26 @@
         <servlet-name>WelcomeServlet</servlet-name>
         <url-pattern>/welcome</url-pattern>
     </servlet-mapping>
+
     <!-- Tasks mapping -->
+    <servlet-mapping>
+        <servlet-name>RegisterTrainingTask</servlet-name>
+        <url-pattern>/tasks/register/trainings</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>RegisterExerciseTask</servlet-name>
+        <url-pattern>/tasks/register/exercises</url-pattern>
+    </servlet-mapping>
 
-  <!--
-        <security-constraint>
-            <web-resource-collection>
-                <url-pattern>/tasks/*</url-pattern>
-            </web-resource-collection>
-            <auth-constraint>
-                <role-name> admin </role-name>
-            </auth-constraint>
-        </security-constraint>
 
-    -->
-
+    <security-constraint>
+        <web-resource-collection>
+            <web-resource-name>admin</web-resource-name>
+            <url-pattern>/tasks/*</url-pattern>
+        </web-resource-collection>
+        <auth-constraint>
+            <role-name>admin</role-name>
+        </auth-constraint>
+    </security-constraint>
 
 </web-app>

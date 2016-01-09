@@ -1,5 +1,8 @@
 package tasks;
 
+import controllers.DAOController;
+
+import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import java.io.BufferedReader;
@@ -14,38 +17,46 @@ import java.util.logging.Logger;
 public abstract class Task extends HttpServlet {
 
     protected static Logger logger = Logger.getLogger(Task.class.getName());
+    protected static final String CONTENT_TYPE = "application/json";
 
-        public static String getBody(HttpServletRequest request) throws IOException {
+    protected DAOController controller;
 
-            String body = "";
-            StringBuilder stringBuilder = new StringBuilder();
-            BufferedReader bufferedReader = null;
+    @Override
+    public void init() throws ServletException {
+        super.init();
+        this.controller = DAOController.getInstance();
+    }
+    public static String getBody(HttpServletRequest request) throws IOException {
 
-            try {
-                InputStream inputStream = request.getInputStream();
-                if (inputStream != null) {
-                    bufferedReader = new BufferedReader(new InputStreamReader(inputStream));
-                    char[] charBuffer = new char[128];
-                    int bytesRead = -1;
-                    while ((bytesRead = bufferedReader.read(charBuffer)) > 0) {
-                        stringBuilder.append(charBuffer, 0, bytesRead);
-                    }
-                } else {
-                    stringBuilder.append("");
+        String body = "";
+        StringBuilder stringBuilder = new StringBuilder();
+        BufferedReader bufferedReader = null;
+
+        try {
+            InputStream inputStream = request.getInputStream();
+            if (inputStream != null) {
+                bufferedReader = new BufferedReader(new InputStreamReader(inputStream));
+                char[] charBuffer = new char[128];
+                int bytesRead = -1;
+                while ((bytesRead = bufferedReader.read(charBuffer)) > 0) {
+                    stringBuilder.append(charBuffer, 0, bytesRead);
                 }
-            } catch (IOException ex) {
-                throw ex;
-            } finally {
-                if (bufferedReader != null) {
-                    try {
-                        bufferedReader.close();
-                    } catch (IOException ex) {
-                        throw ex;
-                    }
+            } else {
+                stringBuilder.append("");
+            }
+        } catch (IOException ex) {
+            throw ex;
+        } finally {
+            if (bufferedReader != null) {
+                try {
+                    bufferedReader.close();
+                } catch (IOException ex) {
+                    throw ex;
                 }
             }
-
-            body = stringBuilder.toString();
-            return body;
         }
+
+        body = stringBuilder.toString();
+        return body;
+    }
 }

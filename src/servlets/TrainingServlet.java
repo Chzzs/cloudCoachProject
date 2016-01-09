@@ -2,21 +2,23 @@ package servlets;
 
 
 import com.google.appengine.api.datastore.EntityNotFoundException;
+import com.google.appengine.api.taskqueue.Queue;
+import com.google.appengine.api.taskqueue.QueueFactory;
+import com.google.appengine.api.taskqueue.TaskOptions;
 import com.google.appengine.labs.repackaged.org.json.JSONArray;
 import controllers.DAOController;
 import models.Training;
 import models.User;
 import org.json.JSONException;
 import org.json.JSONObject;
+import tasks.Task;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.Date;
-import java.util.Enumeration;
-import java.util.List;
+import java.util.*;
 
 /**
  * Created by Chazz on 02/12/15.
@@ -32,20 +34,29 @@ public class TrainingServlet extends Servlet {
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         logger.info("[POST] TrainingServlet");
+
+        /* Retrieves the queue */
+        Queue queue = QueueFactory.getDefaultQueue();
+
+
         PrintWriter out = response.getWriter();
         try{
-            JSONObject json = new JSONObject(getBody(request));
-            long googleId = json.getLong("googleId");
-            System.out.println(googleId);
-            Training training = new Training(json);
+            String body = getBody(request);
+            logger.info(body);
+            JSONObject json = new JSONObject(body);
+            TaskOptions task = TaskOptions.Builder
+                    .withUrl("/tasks/register/trainings")
+                    .param("training", json.getJSONObject("training").toString())
+                    .param("googleId", (String)json.get("googleId"));
 
-            this.controller.setTrainingWithGoogleId(training, googleId);
+            queue.add(task);
+
             response.setStatus(HttpServletResponse.SC_OK);
-        } catch (EntityNotFoundException | JSONException e ){
+        } catch (  JSONException e ){
             out.print(e.getMessage());
             response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
         } finally {
-            out.flush();
+           out.flush();
         }
     }
 

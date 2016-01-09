@@ -144,13 +144,16 @@ public class DAOController {
      * @throws EntityNotFoundException
      * @throws JSONException
      */
-    public void setTrainingWithGoogleId(Training training, long googleId) throws EntityNotFoundException, JSONException {
+    public long setTrainingWithGoogleId(Training training, long googleId) throws EntityNotFoundException, JSONException {
         User user = getUserByGoogleId(googleId);
         long id = user.getId();
 
         /* set the training with the id of the user */
         Entity entity = training.toEntity(id);
         dataStore.put(entity);
+
+        /* return id */
+        return entity.getKey().getId();
     }
 
     /**

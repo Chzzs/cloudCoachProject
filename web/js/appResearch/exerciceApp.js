@@ -1,1 +1,1 @@
-angular.module('exerciceApp',[]);
+angular.module('exerciseApp',[]);
