@@ -12,7 +12,7 @@ function filterFunction($scope,$http,$location){
 console.log('received :');
 console.log(response.data);
    $scope.trainingList=response.data.trainings;
-    $scope.exerciceList=response.data.exercices;
+    $scope.exerciceList=response.data.exercises;
 
    }, function errorCallback(response) {
     // called asynchronously if an error occurs
