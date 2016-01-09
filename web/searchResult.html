@@ -37,7 +37,7 @@
       <div class="row">
     <div class="col-md-10 col-md-offset-1">
 
-      <div id="trainingResearch" ng-controller="researchResultCrt" ng-show="trainingBool"> 
+      <div id="trainingResearch" ng-controller="researchResultCrt" ng-show="trainingList.length">
       <h1> Training </h1>     
         <div   ng-repeat="training in trainingList "> 
             <p> Title: {{ training.title | uppercase }} Duration: {{ training.duration }}</p>
