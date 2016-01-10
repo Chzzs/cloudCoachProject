@@ -5,7 +5,6 @@ trainingFunction.$inject=['$scope','$http', '$window'];
 function trainingFunction($scope,$http, $window){
 	var localUser = $window.sessionStorage.localUser;
 	var googleId = JSON.parse(localUser).tokenId;
-	console.log(googleId);
 
 	$scope.exercises = [];
 
@@ -33,7 +32,7 @@ function trainingFunction($scope,$http, $window){
     };
 
     $scope.deleteExercise= function(index){
-    	$scope.exercices.splice(index,1);
+    	$scope.exercises.splice(index,1);
     };
 
     $scope.postTraining=function(){
@@ -47,7 +46,6 @@ function trainingFunction($scope,$http, $window){
 				'googleId': '12'
 			}
 		}).then(function(response){
-			console.log(response);
 		});
 
     };

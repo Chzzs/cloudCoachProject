@@ -1,0 +1,21 @@
+body {
+  padding-top: 50px;
+  background-image: url(../images/running.jpeg);
+
+}
+.starter-template {
+  padding: 40px 15px;
+  text-align: center;
+}
+
+.to-hide
+{
+	display: none;
+}
+
+.main {
+    margin-top: 1em;
+    background: rgba(255,255,255,0.66);
+    padding: 1em;
+    border-radius: 0.25em;
+}

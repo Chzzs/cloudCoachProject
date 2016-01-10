@@ -50,27 +50,27 @@ public class ExerciseServlet extends Servlet {
      */
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         logger.info("GET ExerciseServlet");
-        String key = request.getParameter("key");
-
-        if(key != null) {
-            //Exercise exercise = this.controller.getExerciseByKey(key);
-            //logger.info(exercise.toString());
-        } else {
-            List<Exercise> exercises = this.controller.getExercises();
-            for(Exercise exercise : exercises) {
-                logger.info(exercise.toString());
+        Long id = Long.parseLong(request.getParameter("id"));
+        PrintWriter out = response.getWriter();
+        try {
+            if (id != null) {
+                Exercise exercise = this.controller.getExerciseById(id);
+                JSONObject json = exercise.toJSON();
+                out.write(json.toString());
+            } else {
+                List<Exercise> exercises = this.controller.getExercises();
+                for (Exercise exercise : exercises) {
+                    logger.info(exercise.toString());
+                }
             }
+        } catch (JSONException e ) {
+            response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+            e.printStackTrace();
+        } finally {
+            out.flush();
         }
 
     }
 
-    @Override
-    protected void doPut(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        logger.info("PUT ExerciseServlet");
-    }
 
-    @Override
-    protected void doDelete(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        logger.info("DELETE ExerciseServlet");
-    }
 }

@@ -7,6 +7,7 @@ import com.google.appengine.api.taskqueue.QueueFactory;
 import com.google.appengine.api.taskqueue.TaskOptions;
 import com.google.appengine.labs.repackaged.org.json.JSONArray;
 import controllers.DAOController;
+import models.Exercise;
 import models.Training;
 import models.User;
 import org.json.JSONException;
@@ -64,14 +65,34 @@ public class TrainingServlet extends Servlet {
             throws ServletException, IOException {
         logger.info("[GET] TrainingServlet");
 
+        if(request.getParameter(Training.ID)!= null) {
+            doGetWithId(request, response);
 
-        if(request.getParameter(GOOGLE_ID) != null) {
+        } else if(request.getParameter(GOOGLE_ID) != null) {
             doGetWithGoogleId(request, response);
         } else {
             doGetWithoutGoogleId(request, response);
         }
 
     }
+
+     private void doGetWithId(HttpServletRequest request, HttpServletResponse response) throws IOException {
+         PrintWriter out = response.getWriter();
+         long id = Long.parseLong(request.getParameter(Training.ID));
+         try {
+             Training training = this.controller.getTrainingById(id);
+             List<Exercise> exercises = this.controller.getExercisesByTrainingId(id);
+             training.setExercises(exercises);
+             JSONObject json = training.toJSON();
+             out.write(json.toString());
+         } catch (JSONException e ){
+             response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+             logger.warning(e.getMessage());
+         } finally {
+             out.flush();
+         }
+     }
+
 
     private void doGetWithoutGoogleId(HttpServletRequest request, HttpServletResponse response) throws IOException {
         PrintWriter out = response.getWriter();

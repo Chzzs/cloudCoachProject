@@ -31,8 +31,8 @@ public class RegisterTrainingsTask extends Task {
             logger.info(string);
             long googleId = Long.parseLong(string);
 
-            Training training = new Training(json);
-            long trainingId = this.controller.setTrainingWithGoogleId(training, googleId);
+            Training training = new Training(json, googleId);
+            long trainingId = this.controller.setTraining(training, googleId);
 
             JSONArray array = json.getJSONArray("exercises");
 

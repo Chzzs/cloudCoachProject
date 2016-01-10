@@ -1,35 +1,4 @@
-<!DOCTYPE html>
-<html lang="en" ng-app="coachMyApp">
 
-<head>
-  <meta charset="utf-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Coach My A**</title>
-  <link href="../css/bootstrap.min.css" rel="stylesheet">
-  <link href="../lib/select2-3.5.1/select2.css" rel="stylesheet">
-  <link href="../css/js.css" rel="stylesheet">
-</head>
-
-<body>
-  <nav class="navbar navbar-inverse" role="navigation">
-    <div class=" col-md-10 col-sm-10 col-xs-10 ">
-      <form class="navbar-form navbar-left" style="width:100%" role="search">
-        <a href="search.html"><span class="glyphicon glyphicon-arrow-left "></span> </a>
-        <label>
-          <h5 style="color:white">Add a Training Plan</h5></label>
-      </form>
-    </div>
-
-    <div class=" col-md-2 col-sm-2 col-xs-2 ">
-      <form class="navbar-form navbar-left" style="width:100%" role="search">
-        <button type="submit" class="btn btn-link"><span class="glyphicon glyphicon-user"></span> </button>
-        <button type="submit" class="btn btn-link"> <span class="glyphicon glyphicon-stats"></span> </button>
-      </form>
-    </div>
-  </nav>
-
-  <div ng-controller="trainingsController">
     <form role="form">
       <div class="row" style="margin-bottom:10px">
         <div class=" col-md-1 col-sm-0 col-xs-0 "></div>
@@ -39,7 +8,6 @@
         <div class=" col-md-6 col-sm-6 col-xs-12 ">
           <input ng-model="training.title" type="text" class="form-control" id="inputTitle" placeholder="Enter your Training plan title">
         </div>
-        <p>{{training.title}}</p>
         <div class=" col-md-3 col-sm-4 hidden-xs">
           <div class=" col-md-4 col-sm-4 hidden-xs">
             <p id="totalTimeValue"><span class="glyphicon glyphicon-time"></span>{{training.duration}}</p>
@@ -122,18 +90,14 @@
           <tr ng-repeat="exercise in exercises track by $index">
             <td>{{$index +1}}</td>
             <td>{{exercise.title}}</td>
-            <td>{{exercise.desc}}</td>
+            <td>{{exercise.description}}</td>
             <td>{{exercise.duration}}</td>
-            <td>
-              <button ng-click="deleteExercise($index)" type="submit" class="btn btn-danger btn-sm"> <span class="glyphicon glyphicon-remove"></span> </button>
+            <td class="text-right">
+              <a href="" ng-click="deleteExercise($index)"> <i class="glyphicon glyphicon-remove"></i></a>
             </td>
           </tr>
-
-
         </table>
       </div>
-      <p>{{trainingToPost}}</p>
-
 
       <div class=" col-md-2 col-sm-5 col-xs-12 text-center">
         <button type="submit" class="btn btn-danger btn-sm"> <span class="glyphicon glyphicon-remove"></span> </button>
@@ -141,19 +105,3 @@
       </div>
 
     </form>
-  </div>
-
-  <script src="../js/vendors/jquery.min.js"></script>
-  <script src="../js/vendors/bootstrap.min.js"></script>
-
-  <script src="../js/vendors/angular.min.js"></script>
-  <script src="../js/vendors/angular-cookies.min.js"></script>
-
-  <script src="../js/vendors/angular-route.min.js"></script>
-
-  <!--script src="js/searchResult.js"></script>-->
-  <script src="../js/modules/app.js"></script>
-  <script src="../js/controllers/trainingsController.js"></script>
-</body>
-
-</html>

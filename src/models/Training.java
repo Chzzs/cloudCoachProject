@@ -15,18 +15,26 @@ import java.util.List;
  */
 public class Training {
 
-    private final static String TITLE = "title";
-    private final static String DESCRIPTION = "description";
-    private final static String EXERCICES = "exercices";
+    public final static String ID = "id";
+    public final static String TITLE = "title";
+    public final static String DESCRIPTION = "description";
+    public final static String EXERCISES = "exercises";
+    public final static String GOOGLE_ID = "googleId";
 
     private final String title;
     private final String description;
+    private long googleId ;
+
+
     private List<Exercise> exercises;
 
+    private long id = 0;
 
-    public Training(JSONObject json) throws JSONException{
+
+    public Training(JSONObject json, long googleId) throws JSONException{
         this.title = json.getString(Training.TITLE);
         this.description = json.getString(Training.DESCRIPTION);
+        this.googleId = googleId;
         this.exercises = new ArrayList<>();
     }
 
@@ -38,6 +46,8 @@ public class Training {
         this.description = (String) entity.getProperty(Training.DESCRIPTION);
 
         this.exercises = new ArrayList<>();
+
+        this.googleId = (long) entity.getProperty(Training.GOOGLE_ID);
 
     }
 
@@ -52,11 +62,12 @@ public class Training {
         this.exercises = exercises;
     }
 
-    public Entity toEntity(long userId){
-        Key key = KeyFactory.createKey(Training.class.getName(), userId);
-        Entity entity = new Entity(Training.class.getName(), key);
+    public Entity toEntity(long googleId){
+    //    Key key = KeyFactory.createKey(User.class.getName(), userId);
+        Entity entity = new Entity(Training.class.getName());
         entity.setProperty(TITLE, this.title);
         entity.setProperty(DESCRIPTION, this.description);
+        entity.setProperty(GOOGLE_ID, googleId);
         return entity;
     }
 
@@ -70,11 +81,18 @@ public class Training {
         JSONObject object = new JSONObject();
         object.put(TITLE, this.title);
         object.put(DESCRIPTION, this.description);
+        object.put(GOOGLE_ID, this.googleId);
         JSONArray array = new JSONArray();
         for(Exercise exercise: this.exercises )
             array.put(exercise.toJSON());
-        object.put(EXERCICES, array);
+        object.put(EXERCISES, array);
+        if(id != 0) {
+            object.put(ID, this.id);
+        }
         return object;
+    }
+    public void setId(long id) {
+        this.id = id;
     }
 
     @Override

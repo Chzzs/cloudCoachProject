@@ -11,6 +11,7 @@ import org.json.JSONObject;
  */
 public class Exercise {
 
+    public final static String ID = "id";
     public final static String TITLE = "title";
     public final static String DURATION = "duration";
     public final static String REPETITION = "repetition";
@@ -23,6 +24,7 @@ public class Exercise {
     private final long duration;
     private final long repetition;
     private long trainingId;
+    private long id = 0;
 
     public Exercise(JSONObject json) throws JSONException{
         this.title = (String) json.get(TITLE);
@@ -51,9 +53,9 @@ public class Exercise {
 
     public Entity toEntity(long trainingId) {
         //TODO workaround
-        Key key = KeyFactory.createKey(Training.class.getName(), trainingId);
-        Entity entity = new Entity(Exercise.class.getName(), key);
-
+      //  Key key = KeyFactory.createKey(Training.class.getName(), trainingId);
+       // Entity entity = new Entity(Exercise.class.getName(), key);
+        Entity entity = new Entity(Exercise.class.getName());
 
         entity.setProperty(TITLE, this.title);
         entity.setProperty(DURATION, this.duration);
@@ -69,6 +71,10 @@ public class Exercise {
         object.put(DESCRIPTION, this.description);
         object.put(DURATION, this.duration);
         object.put(REPETITION, this.repetition);
+        object.put(TRAINING_ID, this.trainingId);
+        if(this.id != 0){
+            object.put(ID, this.id);
+        }
         return object;
     }
 
@@ -76,6 +82,9 @@ public class Exercise {
         return this.repetition;
     }
 
+    public void setId(long id) {
+        this.id = id;
+    }
 
     public long getDuration() {
         return duration;

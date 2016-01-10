@@ -144,12 +144,12 @@ public class DAOController {
      * @throws EntityNotFoundException
      * @throws JSONException
      */
-    public long setTrainingWithGoogleId(Training training, long googleId) throws EntityNotFoundException, JSONException {
-        User user = getUserByGoogleId(googleId);
-        long id = user.getId();
+    public long setTraining(Training training, long googleId) throws EntityNotFoundException, JSONException {
+        //User user = getUserByGoogleId(googleId);
+        //long id = user.getId();
 
         /* set the training with the id of the user */
-        Entity entity = training.toEntity(id);
+        Entity entity = training.toEntity(googleId);
         dataStore.put(entity);
 
         /* return id */
@@ -176,6 +176,21 @@ public class DAOController {
         return trainings;
     }
 
+
+    public Training getTrainingById(long id) {
+        /* recreates the key */
+        Key key = KeyFactory.createKey(Training.class.getName(), id);
+         /* Prepares query and execute it */
+        Query query = new Query(Training.class.getName());
+        query.setFilter(new Query.FilterPredicate(Entity.KEY_RESERVED_PROPERTY , Query.FilterOperator.EQUAL, key));
+        PreparedQuery preparedQuery = dataStore.prepare(query);
+
+        /* Parses result */
+        Entity entity = preparedQuery.asSingleEntity();
+
+        Training training = new Training(entity);
+        return training;
+    }
     /**
      * Fetches a list of trainings according to the given googleId.
      * First retrieves info about the user and calls DAOController#getTrainingsByUserId
@@ -227,13 +242,11 @@ public class DAOController {
     public List<Exercise> getExercisesByTrainingId(long id){
         List<Exercise> exercises = new ArrayList<>();
 
-        /* Creates key with given id */
-        Key key = KeyFactory.createKey(Training.class.getName(), id);
 
-        /* Prepares query and execute it */
         Query query = new Query(Exercise.class.getName());
-        query.setAncestor(key);
+        query.setFilter(new Query.FilterPredicate(Exercise.TRAINING_ID , Query.FilterOperator.EQUAL, id));
         PreparedQuery preparedQuery = dataStore.prepare(query);
+
 
         /* Parses result */
         for(Entity entity : preparedQuery.asIterable())
@@ -258,6 +271,20 @@ public class DAOController {
         return exercises;
     }
 
+    public Exercise getExerciseById(long id) {
+         /* recreates the key */
+        Key key = KeyFactory.createKey(Exercise.class.getName(), id);
+         /* Prepares query and execute it */
+        Query query = new Query(Exercise.class.getName());
+        query.setFilter(new Query.FilterPredicate(Entity.KEY_RESERVED_PROPERTY , Query.FilterOperator.EQUAL, key));
+        PreparedQuery preparedQuery = dataStore.prepare(query);
+
+        /* Parses result */
+        Entity entity = preparedQuery.asSingleEntity();
+        Exercise exercise = new Exercise(entity);
+        return exercise;
+    }
+
     public List<Exercise> getExercisesWithFilter(String filter) {
         List<Exercise> exercises = new ArrayList<>();
 
@@ -266,6 +293,7 @@ public class DAOController {
 
         for(Entity entity : preparedQuery.asIterable()) {
             Exercise exercise = new Exercise(entity);
+            exercise.setId(entity.getKey().getId());
             if(exercise.contains(filter))
                 exercises.add(exercise);
         }
@@ -279,10 +307,14 @@ public class DAOController {
         PreparedQuery preparedQuery = dataStore.prepare(query);
 
         for(Entity entity : preparedQuery.asIterable()) {
+            System.out.println(entity);
+            System.out.println(entity.getKey());
             Training training = new Training(entity);
             if(training.contains(filter)){
                 long trainingId = entity.getKey().getId();
+
                 training.setExercises(getExercisesByTrainingId(trainingId));
+                training.setId(trainingId);
                 trainings.add(training);
 
             }
