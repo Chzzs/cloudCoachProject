@@ -3,7 +3,7 @@
     <div id="trainingResearch" ng-show="trainings.length">
     <h1> Trainings </h1>
       <div ng-repeat="training in trainings ">
-          <a ng-href="/trainings?id={{training.id}}"> {{ training.title | uppercase }} Duration: {{ training.duration }}</a>
+          <a ng-href="#/training/{{training.id}}"> {{ training.title | uppercase }} Duration: {{ training.duration }}</a>
         </div>
      </div>
    </div>
@@ -13,7 +13,7 @@
     <div id="exerciseResearch"  ng-show="exercises.length">
     <h1> Exercises </h1>
       <div ng-repeat="exercise in exercises ">
-          <a ng-href="/exercises?id={{exercise.id}}"> {{ exercise.title | uppercase }} Duration: {{ exercise.duration }}</p>
+          <a ng-href="#/exercise/{{exercise.id}}"> {{ exercise.title | uppercase }} Duration: {{ exercise.duration }}</p>
         </div>
      </div>
 </div>

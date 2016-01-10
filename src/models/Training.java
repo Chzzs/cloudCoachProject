@@ -62,6 +62,8 @@ public class Training {
         this.exercises = exercises;
     }
 
+
+
     public Entity toEntity(long googleId){
     //    Key key = KeyFactory.createKey(User.class.getName(), userId);
         Entity entity = new Entity(Training.class.getName());

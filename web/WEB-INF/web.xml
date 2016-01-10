@@ -44,7 +44,10 @@
         <servlet-name>RegisterExerciseTask</servlet-name>
         <servlet-class>tasks.RegisterExercisesTask</servlet-class>
     </servlet>
-
+    <servlet>
+        <servlet-name>ResultServlet</servlet-name>
+        <servlet-class>servlets.ResultServlet</servlet-class>
+    </servlet>
 
 
     <!-- Servlets mapping -->
@@ -76,6 +79,11 @@
     <servlet-mapping>
         <servlet-name>WelcomeServlet</servlet-name>
         <url-pattern>/welcome</url-pattern>
+    </servlet-mapping>
+
+    <servlet-mapping>
+        <servlet-name>ResultServlet</servlet-name>
+        <url-pattern>/results</url-pattern>
     </servlet-mapping>
 
     <!-- Tasks mapping -->

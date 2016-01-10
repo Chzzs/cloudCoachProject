@@ -4,6 +4,7 @@ import com.google.appengine.api.datastore.*;
 import com.google.appengine.api.memcache.MemcacheService;
 import com.google.appengine.api.memcache.jsr107cache.GCacheFactory;
 import models.Exercise;
+import models.Result;
 import models.Training;
 import models.User;
 import org.json.JSONException;
@@ -156,6 +157,32 @@ public class DAOController {
         return entity.getKey().getId();
     }
 
+    public void setResult(long googleId, long exerciseId) {
+
+        Result result = new Result(googleId, exerciseId);
+        Entity entity = result.toEntity();
+        dataStore.put(entity);
+
+    }
+
+    public List<Result> getResultsByGoogleId(long googleId) {
+        List<Result> results = new ArrayList<>();
+
+        Query query = new Query(Result.class.getName());
+
+          /* Prepares query and execute it */
+        query.setFilter(new Query.FilterPredicate(Result.GOOGLE_ID , Query.FilterOperator.EQUAL, googleId));
+        PreparedQuery preparedQuery = dataStore.prepare(query);
+
+        for(Entity entity : preparedQuery.asIterable()) {
+            Result result = new Result(entity);
+            results.add(result);
+        }
+
+        return results;
+    }
+
+
     /**
      * Fetches the list of all trainings.
      * @return the list of all trainings.
@@ -249,8 +276,11 @@ public class DAOController {
 
 
         /* Parses result */
-        for(Entity entity : preparedQuery.asIterable())
-            exercises.add(new Exercise(entity));
+        for(Entity entity : preparedQuery.asIterable()) {
+            Exercise exercise = new Exercise(entity);
+            exercise.setId(entity.getKey().getId());
+            exercises.add(exercise);
+        }
 
         return exercises;
     }

@@ -1,0 +1,63 @@
+
+
+
+     <form >
+
+          <div class=" col-md-1 col-sm-0 col-xs-0 " ></div>
+        <div class=" col-md-11 col-sm-12 col-xs-12 " >
+            <h1>{{training.title}}</h1>
+            <h3>{{training.desc}}</h3>
+                <table class="table table-striped table-condensed" ng-repeat="ex in training.exeList">
+                    <tr>
+                        <td class=" col-md-12 col-sm-12 col-xs-12">
+                        <div class="row">
+                            <div class=" col-md-3 col-sm-12 col-xs-12 ">
+                                <h3>{{ex.title}}</h3>
+                            </div>
+                            <div class=" col-md-1 col-sm-2 col-xs-2 ">
+                                <p id="totalTimeValue" style="margin-top:25px"><span class="glyphicon glyphicon-time"></span>{{ex.duration/3600 | number:0}} H {{(ex.duration%3600)/60 | number:0}} M {{ex.duration%60}} S</p>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class=" col-md-1 col-sm-0 col-xs-0 " ></div>
+                            <div class=" col-md-6 col-sm-12 col-xs-12 ">
+                                <p>{{ex.desc}}</p>
+                            </div>
+                            <div class=" col-md-3 col-sm-12 col-xs-12 ">
+                                <div class=" col-md-12 col-sm-12 col-xs-12 ">
+                                    <div id="flipcountdownbox1">
+                                    </div>
+                                </div>
+                                <div class=" col-md-12 col-sm-12 col-xs-12 centered">
+                                    <div class="btn-group">
+                                        <button type="button" class="btn btn-default " ><span class="glyphicon glyphicon-play"></span> </button>
+                                        <button type="button" class="btn btn-default " > <span class="glyphicon glyphicon-pause"></span> </button>
+                                        <button type="button" class="btn btn-default " > <span class="glyphicon glyphicon-stop"></span> </button>
+                                    </div>
+                                    <button type="button" class="btn btn-default " > <span class="glyphicon glyphicon-repeat"></span> </button>
+                                </div>
+
+                            </div>
+                        </div>
+                            <div class=" col-md-2 ol-sm-5 col-xs-12 text-center" >
+                                <button type="submit" class="btn btn-success btn-lg"> <span class="glyphicon glyphicon-ok"></span> </button>
+                                <button type="submit" class="btn btn-danger btn-sm"> <span class="glyphicon glyphicon-fast-forward"></span> </button>
+                            </div>
+
+                        </td>
+                    </tr>
+
+
+
+                </table>
+             </div>
+
+    <!-- <div class=" col-md-2 ol-sm-0 col-xs-0 " ></div> -->
+    <div class=" col-md-10 ol-sm-5 col-xs-0 " ></div>
+    <div class=" col-md-2 ol-sm-5 col-xs-12 text-center" >
+        <button type="submit" class="btn btn-danger btn-sm"> <span class="glyphicon glyphicon-remove"></span> </button>
+        <button type="submit" class="btn btn-success btn-lg"> <span class="glyphicon glyphicon-ok"></span> </button>
+    </div>
+
+
+</form>

@@ -6,6 +6,7 @@ import com.google.appengine.api.taskqueue.Queue;
 import com.google.appengine.api.taskqueue.QueueFactory;
 import com.google.appengine.api.taskqueue.TaskOptions;
 import com.google.appengine.labs.repackaged.org.json.JSONArray;
+import com.google.gson.Gson;
 import controllers.DAOController;
 import models.Exercise;
 import models.Training;
@@ -78,16 +79,17 @@ public class TrainingServlet extends Servlet {
 
      private void doGetWithId(HttpServletRequest request, HttpServletResponse response) throws IOException {
          PrintWriter out = response.getWriter();
+         response.setContentType("application/json");
          long id = Long.parseLong(request.getParameter(Training.ID));
          try {
              Training training = this.controller.getTrainingById(id);
              List<Exercise> exercises = this.controller.getExercisesByTrainingId(id);
              training.setExercises(exercises);
-             JSONObject json = training.toJSON();
-             out.write(json.toString());
-         } catch (JSONException e ){
-             response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-             logger.warning(e.getMessage());
+
+             //Exercises were parsed as string, so moved to google.Gson.
+             Gson gson = new Gson();
+
+             out.write(gson.toJson(training));
          } finally {
              out.flush();
          }

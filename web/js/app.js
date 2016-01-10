@@ -10,10 +10,20 @@ angular.module('coachMyApp').config(function($routeProvider) {
   }).when('/search/:query', {
     templateUrl: 'static/search.html',
     controller: 'searchController'
+  }).when('/training/:id', {
+    templateUrl: 'static/training.html',
+    controller: 'trainingController'
+  }).when('/exercise/:id', {
+    templateUrl: 'static/exercise.html',
+    controller: 'exerciseController'
   }).when('/add', {
     templateUrl: 'static/add.html',
     controller: 'trainingsController'
-  }).otherwise({
+  }).when('/results/:id', {
+    templateUrl: 'static/results.html',
+    controller: 'resultsController'
+  })
+  .otherwise({
     redirectTo: '/'
   })
 });
